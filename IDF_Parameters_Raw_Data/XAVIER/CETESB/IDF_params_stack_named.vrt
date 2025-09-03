@@ -1,0 +1,121 @@
+<VRTDataset rasterXSize="452" rasterYSize="391">
+  <SRS>EPSG:4326</SRS>
+  <GeoTransform>-73.9936909637545, 0.0999914742753439, 0, 5.29954813659323, 0, -0.0999914742753439</GeoTransform>
+  <VRTRasterBand dataType="Float32" band="1">
+    <Description>K</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="2">
+    <Description>a</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>2</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="3">
+    <Description>b</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>3</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="4">
+    <Description>c</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>4</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="5">
+    <Description>R2</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>5</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="6">
+    <Description>RMSE</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>6</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="7">
+    <Description>MSE</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>7</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="8">
+    <Description>KS_D</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>8</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="9">
+    <Description>KS_p</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>9</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="10">
+    <Description>KS_reject</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>10</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="11">
+    <Description>AMD_mean</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>11</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="12">
+    <Description>AMD_std</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>12</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Float32" band="13">
+    <Description>Nyears</Description>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">IDF_params_stack.tif</SourceFilename>
+      <SourceBand>13</SourceBand>
+      <SrcRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+      <DstRect xOff="0" yOff="0" xSize="452" ySize="391"/>
+    </SimpleSource>
+  </VRTRasterBand>
+</VRTDataset>
