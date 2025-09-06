@@ -1,0 +1,660 @@
+/**** 🌧️ GRIDF – IDF Coefficients & Metrics Viewer (Stacks only)
+ * One multiband stack per combo:
+ *   <ASSET_PREFIX>/<PRODUCT>_<BIAS>_<DISAGG>_STACK
+ * Bands expected (by name or index fallback):
+ *   K, a, b_min, c, R2, RMSE, MSE, KS_D, KS_p, KS_reject, AMD_mean, AMD_std, Nyears
+ */
+
+ui.root.clear();
+var map = ui.Map();
+map.setCenter(-57, -15, 4);
+ui.root.add(map);
+
+/* =========================
+ * 0) Project / naming setup
+ * ========================= */
+var ASSET_PREFIX = 'projects/gridf-470516/assets';   // <== your folder
+
+// Fixed product (series) order used in charts + colors
+var PRODUCT_ORDER = ['XAVIER','IMERG','CHIRPS','PERS'];
+var PRODUCT_SERIES_LABEL = {
+  'XAVIER':'BR-DWGD (XAVIER)',
+  'IMERG' :'IMERG',
+  'CHIRPS':'CHIRPS',
+  'PERS'  :'PERSIANN'
+};
+var PRODUCT_COLORS = { // blue, green, orange, purple
+  'XAVIER':'#1f77b4',
+  'IMERG' :'#2ca02c',
+  'CHIRPS':'#ff7f0e',
+  'PERS'  :'#9467bd'
+};
+
+// Products (datasets) and availability info + fixed colors for charts
+var PRODUCTS = [
+  {code: 'XAVIER', label: 'BR-DWGD',  years: '1994–2024', biases: ['RAW','BC'], color: '#1f77b4', colorName: 'blue'},
+  {code: 'IMERG',  label: 'IMERG',    years: '2000–2024', biases: ['RAW','BC'], color: '#2ca02c', colorName: 'green'},
+  {code: 'CHIRPS', label: 'CHIRPS',   years: '1994–2024', biases: ['RAW','BC'], color: '#ff7f0e', colorName: 'orange'},
+  {code: 'PERS',   label: 'PERSIANN', years: '1994–2024', biases: ['RAW','BC'], color: '#9467bd', colorName: 'purple'}
+];
+
+// Disaggregation options
+var DISAGG_OPTIONS = [
+  {code: 'LOC', label: 'Locally-Disaggregated'},
+  {code: 'CET', label: 'CETESB'},
+  {code: 'STN', label: 'Station-derived'}   // <<< NEW
+];
+
+// Band order fallback (if EE lost band names during ingest)
+var STACK_INDEX = {
+  K: 0, a: 1, b_min: 2, c: 3,
+  R2: 4, RMSE: 5, MSE: 6,
+  KS_D: 7, KS_p: 8, KS_reject: 9,
+  AMD_mean: 10, AMD_std: 11, Nyears: 12
+};
+
+// Line colors for IDF curves (TR series)
+var idfLineColors = ['#003a7d', '#008dff', '#4ecb8d', '#f9e858', '#ff9d3a', '#d83034'];
+
+/* =========================
+ * 1) Viz palettes & ranges
+ * ========================= */
+ 
+var palettes = require('users/gena/packages:palettes');
+
+var palette = palettes.matplotlib.magma[7]
+
+var palettes = {
+  coeffs: palette,
+  mse:    palette,
+  rmse:   palette,
+  r2:     palette
+};
+
+
+
+
+var visParams = {
+  'K'   : {min: 0,   max: 5000, palette: palettes.coeffs},
+  'a'   : {min: 0,   max: 1.2,  palette: palettes.coeffs},
+  'b'   : {min: 0,   max: 30,   palette: palettes.coeffs},
+  'c'   : {min: 0,   max: 1.8,  palette: palettes.coeffs},
+  'MSE' : {min: 0,   max: 900,   palette: palettes.mse},
+  'RMSE': {min: 0,   max: 30,   palette: palettes.rmse},
+  'R2'  : {min: 0.5, max: 1,    palette: palettes.r2}
+};
+
+var prettyName = {
+  'K'   : 'K (Sherman scaling)',
+  'a'   : 'a (Return-period exponent)',
+  'b'   : 'b (Duration offset, min)',
+  'c'   : 'c (Duration decay exponent)',
+  'MSE' : 'MSE (Mean Squared Error)',
+  'RMSE': 'RMSE (Root MSE)',
+  'R2'  : 'R² (Coefficient of Determination)'
+};
+
+/* =========================
+ * 2) UI (left-side panel)
+ * ========================= */
+var logo = ui.Label('GRIDF - BR', {
+  fontWeight: 'bold', fontSize: '20px', color: '#1b5e20', margin: '8px 0 3px 0'
+});
+var developer = ui.Label(
+  'Product developed by Marcus Nobrega Gomes Jr., Ph.D. ',
+  {fontSize: '12px', color: '#555', margin: '0 0 10px 0'}
+);
+
+var subtitle = ui.Label(
+  'Click the map to retrieve local IDF parameters and plot curves. Choose product, bias, and disaggregation.',
+  {fontSize: '12px', color: '#555', margin: '0 0 10px 0'}
+);
+// Product select
+var productSelect = ui.Select({
+  items: PRODUCTS.map(function(p){ return p.label; }),
+  value: PRODUCTS[0].label,
+  style: {stretch: 'horizontal'}
+});
+
+// Bias select (options depend on product)
+var biasSelect = ui.Select({
+  items: ['RAW','BC'],
+  value: 'RAW',
+  style: {stretch: 'horizontal'}
+});
+
+// Disaggregation select
+var disaggSelect = ui.Select({
+  items: DISAGG_OPTIONS.map(function(d){ return d.label; }),
+  value: DISAGG_OPTIONS[0].label,
+  style: {stretch: 'horizontal'}
+});
+
+// Layer selector
+var layerKeys = ['K','a','b','c','MSE','RMSE','R2'];
+var layerItems = layerKeys.map(function(k){ return (prettyName[k] || k) + ' (' + k + ')'; });
+var codeByLabel = {};
+layerKeys.forEach(function(k, i){ codeByLabel[layerItems[i]] = k; });
+var layerSelect = ui.Select({
+  items: layerItems,
+  value: layerItems[0],
+  style: {stretch: 'horizontal'}
+});
+
+// Legend + info
+var legend = ui.Panel({style: {backgroundColor: 'rgba(255,255,255,0.85)', padding: '8px', maxWidth: '360px'}});
+var infoPanel = ui.Panel({style: {backgroundColor: 'rgba(255,255,255,0.85)', padding: '8px', margin: '8px 0'}});
+var hint = ui.Label('', {fontSize: '11px', color: '#555', margin: '4px 0 8px 0'});
+
+// Assemble left panel
+var leftPanel = ui.Panel({
+  widgets: [
+    logo, developer, subtitle,
+    ui.Label('Product (dataset)', {fontWeight:'bold'}), productSelect,
+    ui.Label('Bias', {fontWeight:'bold', margin:'6px 0 0 0'}), biasSelect,
+    ui.Label('Disaggregation', {fontWeight:'bold', margin:'6px 0 0 0'}), disaggSelect,
+    ui.Label('Layer', {fontWeight:'bold', margin:'8px 0 0 0'}), layerSelect,
+    hint,
+    ui.Label('Legend', {fontWeight:'bold'}), legend,
+    ui.Label('Sampled Values', {fontWeight:'bold', margin:'8px 0 0 0'}), infoPanel
+  ],
+  style: {
+    width: '365px',
+    padding: '2px',
+    backgroundColor: '#e8f5e9',
+    position: 'bottom-left',
+    margin: '0 0 12px 12px'
+  }
+});
+map.add(leftPanel);
+
+/* =========================
+ * 3) Legend builder
+ * ========================= */
+function buildContinuousLegend(params) {
+  legend.clear();
+  var min = params.min;
+  var max = params.max;
+  var palette = params.palette;
+
+  var title = ui.Label(prettyName[params.key] || params.key, {
+    fontWeight: 'bold', fontSize: '14px', margin: '0 0 6px 0'
+  });
+
+  var grad = ui.Thumbnail({
+    image: ee.Image.pixelLonLat().select(0).multiply((max - min)/100.0).add(min),
+    params: {bbox: [0,0,100,10], dimensions:'100x10', format:'png', min: min, max: max, palette: palette},
+    style: {stretch: 'horizontal', margin: '6px 0 0 0', maxHeight: '30px'}
+  });
+
+  var labels = ui.Panel({
+    widgets: [
+      ui.Label(min.toFixed ? min.toFixed(2) : min),
+      ui.Label({value:'', style:{stretch:'horizontal'}}),
+      ui.Label(max.toFixed ? max.toFixed(2) : max)
+    ],
+    layout: ui.Panel.Layout.flow('horizontal')
+  });
+
+  legend.add(title);
+  legend.add(grad);
+  legend.add(labels);
+}
+
+/* =========================
+ * 4) Asset loading & cache (STACKS)
+ * ========================= */
+
+// From product label back to code
+function productLabelToCode(label) {
+  return PRODUCTS.filter(function(p){ return p.label === label; })[0].code;
+}
+function disaggLabelToCode(label) {
+  return DISAGG_OPTIONS.filter(function(d){ return d.label === label; })[0].code;
+}
+
+// Build the stack asset id
+function stackAssetId(productCode, biasCode, disaggCode) {
+  return ASSET_PREFIX + '/' + productCode + '_' + biasCode + '_' + disaggCode + '_STACK';
+}
+
+// Select by name if present, else by index; then rename
+function selectBandSafe(img, desiredName, fallbackIndex, originalNameOpt) {
+  var originalName = originalNameOpt || desiredName;
+  var has = img.bandNames().indexOf(originalName).neq(-1);
+  var sel = ee.Image(ee.Algorithms.If(has, img.select(originalName), img.select(fallbackIndex)));
+  return sel.rename(desiredName);
+}
+
+// Split stack -> compact stack [K,a,b,c,MSE,RMSE,R2]
+function splitStack(stackImg) {
+  var K    = selectBandSafe(stackImg, 'K',    STACK_INDEX.K,     'K');
+  var a    = selectBandSafe(stackImg, 'a',    STACK_INDEX.a,     'a');
+  var bmin = selectBandSafe(stackImg, 'b',    STACK_INDEX.b_min, 'b_min');
+  var c    = selectBandSafe(stackImg, 'c',    STACK_INDEX.c,     'c');
+  var R2   = selectBandSafe(stackImg, 'R2',   STACK_INDEX.R2,    'R2');
+  var RMSE = selectBandSafe(stackImg, 'RMSE', STACK_INDEX.RMSE,  'RMSE');
+  var MSE  = selectBandSafe(stackImg, 'MSE',  STACK_INDEX.MSE,   'MSE');
+
+  var layerMap = {'K': K, 'a': a, 'b': bmin, 'c': c, 'R2': R2, 'RMSE': RMSE, 'MSE': MSE};
+  var full     = K.addBands([a, bmin, c, MSE, RMSE, R2]).rename(['K','a','b','c','MSE','RMSE','R2']);
+  return {layerMap: layerMap, fullStack: full};
+}
+
+// Cache
+var comboCache = {};  // key = "PRODUCT|BIAS|DISAGG"
+
+function getCombo(productCode, biasCode, disaggCode) {
+  var key = [productCode, biasCode, disaggCode].join('|');
+  if (comboCache[key]) return comboCache[key];
+  var rawStack = ee.Image(stackAssetId(productCode, biasCode, disaggCode));
+  var split = splitStack(rawStack);
+  var out = {layerMap: split.layerMap, fullStack: split.fullStack, rawStack: rawStack};
+  comboCache[key] = out;
+  return out;
+}
+
+/* =========================
+ * 5) Dynamic layer drawing
+ * ========================= */
+var current = {
+  productCode: productLabelToCode(productSelect.getValue()),
+  biasCode: 'RAW',
+  disaggCode: disaggLabelToCode(disaggSelect.getValue()),
+  layerKey: codeByLabel[layerSelect.getValue()],
+  fullStack: null,
+  layerMap: null
+};
+
+function refreshAvailabilityHint() {
+  var p = PRODUCTS.filter(function(pp){ return pp.code === current.productCode; })[0];
+  hint.setValue('Years: ' + (p.years || '') + '   |   Available bias options: ' + p.biases.join(', '));
+}
+
+function updateBiasOptions() {
+  var p = null;
+  for (var i = 0; i < PRODUCTS.length; i++) if (PRODUCTS[i].code === current.productCode) { p = PRODUCTS[i]; break; }
+  var items = p ? p.biases : ['RAW'];
+
+  var prev = biasSelect.getValue() || current.biasCode; // remember
+
+  biasSelect.items().reset(items);
+  if (items.indexOf(prev) >= 0) {
+    biasSelect.setValue(prev, true);
+    current.biasCode = prev;
+  } else {
+    biasSelect.setValue(items[0], true);
+    current.biasCode = items[0];
+  }
+}
+
+function drawLayer(layerLabel) {
+  current.layerKey = codeByLabel[layerLabel];
+  var combo = getCombo(current.productCode, current.biasCode, current.disaggCode);
+  current.layerMap = combo.layerMap;
+  current.fullStack = combo.fullStack;
+
+  map.layers().reset();
+  var img = current.layerMap[current.layerKey];
+  var vp  = visParams[current.layerKey];
+  var title = (prettyName[current.layerKey] || current.layerKey) +
+              ' | ' + current.productCode + ' | ' + current.biasCode + ' | ' + current.disaggCode;
+  map.addLayer(img, vp, title, true, 1.0);
+  buildContinuousLegend({key: current.layerKey, min: vp.min, max: vp.max, palette: vp.palette});
+}
+
+productSelect.onChange(function(newLabel){ current.productCode = productLabelToCode(newLabel); updateBiasOptions(); refreshAvailabilityHint(); drawLayer(layerSelect.getValue()); });
+biasSelect.onChange(function(newBias){ current.biasCode = newBias; drawLayer(layerSelect.getValue()); });
+disaggSelect.onChange(function(newLabel){ current.disaggCode = disaggLabelToCode(newLabel); drawLayer(layerSelect.getValue()); });
+layerSelect.onChange(drawLayer);
+
+// Initial paint
+updateBiasOptions();
+refreshAvailabilityHint();
+drawLayer(layerSelect.getValue());
+
+/* =========================
+ * 6) Charts & sampling utils
+ * ========================= */
+
+// Scalar version for single-point IDF curve
+function idfIntensityNum(K, a, b, c, tMin, RP) {
+  var num = ee.Number(K).multiply(ee.Number(RP).pow(ee.Number(a)));
+  var den = ee.Number(b).add(ee.Number(tMin)).pow(ee.Number(c));
+  return num.divide(den); // mm/h
+}
+
+// Image version for bar charts
+function intensityImage(stack, RP, tMin){
+  var K = stack.select('K'), a = stack.select('a');
+  var b = stack.select('b'), c = stack.select('c');
+  var rpImg = ee.Image.constant(RP).toFloat();
+  var num = K.multiply(rpImg.pow(a));
+  var den = b.add(ee.Number(tMin)).pow(c);
+  return num.divide(den).rename('I');  // mm/h
+}
+
+var standardDurations = [5, 10, 15, 20, 25, 30, 60, 120, 240];
+var RETURN_PERIODS = [2, 5, 10, 25, 50, 100];
+var RP_NAMES = ['RP = 2yr','RP = 5yr','RP = 10yr','RP = 25yr','RP = 50yr','RP = 100yr'];
+
+function buildIdfArray(K, a, b, c, durationsMinList, returnPeriods) {
+  var durs = ee.List(durationsMinList);
+  var rps  = ee.List(returnPeriods);
+  var rows = durs.map(function(t) {
+    t = ee.Number(t);
+    return rps.map(function(RP) { return idfIntensityNum(K, a, b, c, t, ee.Number(RP)); });
+  });
+  return ee.Array(rows); // [nDur x nTR]
+}
+
+function makeIdfLineChart(idfArray, durationsMinList, seriesNames, titleText) {
+  var minX = Math.min.apply(null, durationsMinList);
+  var maxX = Math.max.apply(null, durationsMinList);
+  var extraCandidates = [10, 20, 45, 90, 180, 240, 300, 480, 600, 720, 1440];
+  var tickSet = durationsMinList.concat(extraCandidates)
+    .filter(function(x, i, arr){ return arr.indexOf(x) === i; })
+    .filter(function(x){ return x >= minX && x <= maxX; })
+    .sort(function(a,b){ return a - b; });
+
+  return ui.Chart.array.values({
+      array: idfArray,
+      axis: 0,
+      xLabels: durationsMinList
+    })
+    .setChartType('LineChart')
+    .setSeriesNames(seriesNames)
+    .setOptions({
+      title: titleText || '',
+      titleTextStyle: {bold: true},
+      chartArea: {left: 70, top: 40, width: '78%', height: '65%'},
+      backgroundColor: {stroke: '#000000', strokeWidth: 2},
+      hAxis: {
+        title: 'Duration [min]',
+        ticks: tickSet,
+        viewWindowMode: 'explicit',
+        viewWindow: {min: minX, max: maxX},
+        slantedText: false,
+        textStyle: {bold: true},
+        titleTextStyle: {italic: true, bold: false},
+        gridlines: {color: '#bdbdbd'}, minorGridlines: {color: '#e0e0e0'}
+      },
+      vAxis: {
+        title: 'Rainfall Intensity [mm/h]',
+        textStyle: {bold: true},
+        titleTextStyle: {italic: true, bold: false},
+        gridlines: {color: '#bdbdbd'}, minorGridlines: {color: '#e0e0e0'},
+        format: '#,##0.0'
+      },
+      colors: idfLineColors, lineWidth: 2, pointSize: 6, pointShape: 'diamond',
+      legend: { position: 'bottom', textStyle: {bold: true} },
+      interpolateNulls: true,
+      crosshair: { trigger: 'both', focused: { color: '#000' }, opacity: 0.6 },
+      focusTarget: 'category',
+      explorer: { actions: ['dragToZoom', 'rightClickToReset'], keepInBounds: true }
+    });
+}
+
+/* =========================
+ * 7) Admin boundaries (context)
+ * ========================= */
+var adm0 = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level0')
+  .filter(ee.Filter.inList('ADM0_NAME', [
+    'Argentina','Bolivia','Brazil','Chile','Colombia','Ecuador','Guyana',
+    'Paraguay','Peru','Suriname','Uruguay','Venezuela'
+  ]));
+var adm2 = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level2')
+  .filter(ee.Filter.inList('ADM0_NAME', [
+    'Argentina','Bolivia','Brazil','Chile','Colombia','Ecuador','Guyana',
+    'Paraguay','Peru','Suriname','Uruguay','Venezuela'
+  ]));
+  
+  // MERIT DEM (meters)
+var meritDem = ee.Image('MERIT/DEM/v1_0_3').select('dem').rename('elev');
+
+map.addLayer(adm0.style({color:'#666', fillColor: '00000000', width:1}), {}, 'Country Borders', true, 0.8);
+
+// ---- NEW: helper to get a nice place label from GAUL level-2 ----
+function getLocationLabel(pt, cb) {
+  var props = ee.Feature(adm2.filterBounds(pt).first())
+               .toDictionary(['ADM0_NAME','ADM1_NAME','ADM2_NAME']);
+  props.evaluate(function(n){
+    var adm0 = (n && n.ADM0_NAME) || '—';
+    var adm1 = (n && n.ADM1_NAME) || '';
+    var adm2n = (n && n.ADM2_NAME) || '';
+    var city = adm2n || adm1 || adm0;
+    var full = (adm2n ? (adm2n + ', ') : '') +
+               (adm1  ? (adm1  + ', ') : '') + adm0;
+    cb({city: city, full: full});
+  });
+}
+
+/***** === RIGHT-SIDE PANEL (IDF curve + design bars) === *****/
+var comparePanel = ui.Panel({
+  style: {
+    width: '700px',                      // was 620px
+    padding: '10px',
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    position: 'bottom-right', margin: '0 12px 12px 0'
+  }
+});
+
+map.add(comparePanel);
+
+// === Small toast panel for user messages (top-center) ===
+var toast = ui.Panel({
+  style: {
+    position: 'top-center',
+    padding: '8px 12px',
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    border: '1px solid #c00',
+    shown: false
+  }
+});
+map.add(toast);
+
+function showToast(message, color) {
+  toast.clear();
+  toast.style().set('shown', true);
+  toast.add(ui.Label(message, {color: color || '#c00', fontWeight: 'bold'}));
+  ui.util.setTimeout(function () {
+    toast.style().set('shown', false);
+  }, 3500);
+}
+
+
+var explainLabel = ui.Label(
+  'We build IDF curves by taking each pixel’s annual-maximum daily rainfall series, estimating 24-hour design depths for several return periods with a Gumbel fit, then fitting a smooth four-parameter curve (K, a, b, c) to those intensities. Sub-daily values come from disaggregating the 24-hour depth using either: (i) CETESB fixed duration factors, (ii) locally mapped depth ratios (duration D divided by daily depth, cleaned for monotonicity and filled from nearest clean neighbor), or (iii) Station-derived ratios built from nearby gauge records. Intensities are depth divided by duration in hours.',
+  {fontSize:'11px', color:'#444', margin:'6px 0 8px 0'}
+);
+
+// Two design points
+var DESIGN_POINTS = [
+  {title: 'RP = 10 yrs, t = 10 min', RP: 10,  tMin: 10},
+  {title: 'RP = 100 yrs, t = 60 min', RP: 100, tMin: 60}
+];
+
+var SAMPLE_SCALE = 1000;
+
+// Build one grouped bar chart (series = datasets; groups = bias/disagg combos)
+function buildBarChart(pt, RP, tMin){
+  // 6 groups, fixed order for readability
+  var groups = [
+    {bias: 'RAW', disagg: 'CET', label: 'RAW - CETESB'},
+    {bias: 'RAW', disagg: 'LOC', label: 'RAW - Local'},
+    {bias: 'RAW', disagg: 'STN', label: 'RAW - Station'},    // <<< NEW
+    {bias: 'BC',  disagg: 'CET', label: 'BC - CETESB'},
+    {bias: 'BC',  disagg: 'LOC', label: 'BC - Local'},
+    {bias: 'BC',  disagg: 'STN', label: 'BC - Station'}       // <<< NEW
+  ];
+  var groupLabels = groups.map(function(g){ return g.label; });
+
+  // rows = groups, columns = products
+  function rowForGroup(bias, disagg){
+    var vals = PRODUCTS.map(function(P){
+      var combo = getCombo(P.code, bias, disagg);
+      var Iimg  = intensityImage(combo.fullStack.select(['K','a','b','c']), RP, tMin);
+      var v     = ee.Number(Iimg.reduceRegion({
+                    reducer: ee.Reducer.first(),
+                    geometry: pt,
+                    scale: SAMPLE_SCALE,
+                    bestEffort: true
+                  }).get('I'));
+      return v;
+    });
+    return ee.List(vals);
+  }
+
+  var matrix = ee.Array(ee.List(
+    groups.map(function(g){ return rowForGroup(g.bias, g.disagg); })
+  ));
+
+  var seriesNames  = PRODUCTS.map(function(P){ return P.label; });
+  var seriesColors = PRODUCTS.map(function(P){ return P.color; });
+
+  var colorSentence = 'Colors: ' + PRODUCTS.map(function(P){
+    return P.label + ' (' + P.colorName + ')';
+  }).join(', ');
+
+  return ui.Chart.array.values(matrix, 0, groupLabels)
+    .setChartType('ColumnChart')
+    .setSeriesNames(seriesNames)
+    .setOptions({
+      title: 'TR = ' + RP + ' yr, t = ' + tMin + ' min,  ' + colorSentence,
+      titleTextStyle: {bold: true},
+      colors: seriesColors,
+      legend: { position: 'top', textStyle: {bold: true} },
+      chartArea: {left: 80, top: 50, width: '78%', height: '65%'},
+      hAxis: { slantedText: true, slantedTextAngle: 25, textStyle: {fontSize: 11} },
+      vAxis: {
+        title: 'Rainfall Intensity (mm/h)',
+        viewWindow: {min: 0},
+        gridlines: {color: '#cfd8dc'},
+        minorGridlines: {color: '#eceff1'},
+        format: '#,##0.0'
+      },
+      bar: {groupWidth: '80%'}
+    });
+}
+
+function updateComparisonPanel(pointGeom, idfChart){
+  comparePanel.clear();
+  comparePanel.add(ui.Label('Point diagnostics', {
+    fontWeight: 'bold', fontSize: '16px', color: '#1b5e20', margin: '0 0 12 0'
+  }));
+  if (idfChart) comparePanel.add(idfChart);
+  comparePanel.add(explainLabel);
+  DESIGN_POINTS.forEach(function(dp){
+    comparePanel.add( buildBarChart(pointGeom, dp.RP, dp.tMin) );
+  });
+}
+
+/* =========================
+ * 8) Click sampling & charts (with city in title)
+ * ========================= */
+map.style().set('cursor', 'crosshair');
+
+map.onClick(function(coords){
+  infoPanel.clear();
+  var pt = ee.Geometry.Point([coords.lon, coords.lat]);
+
+  // Get a friendly location label first, then sample bands
+  getLocationLabel(pt, function(loc){
+    var combo = getCombo(current.productCode, current.biasCode, current.disaggCode);
+    var fullStack = combo.fullStack;  // [K,a,b,c,MSE,RMSE,R2]
+
+    var sampled = fullStack.addBands(meritDem).reduceRegion({
+      reducer: ee.Reducer.first(),
+      geometry: pt,
+      scale: 1000,        // keeps your existing sampling scale
+      bestEffort: true
+    });
+
+    sampled.evaluate(function(dict){
+      var idfChartForRight = null;
+
+      if (!dict) {
+        var msg = 'No data is available for this region with the current selection.';
+        infoPanel.add(ui.Label(msg, {color:'#c00'}));
+        showToast(msg);
+        updateComparisonPanel(pt, null);
+        return;
+      }
+
+      // Selection summary + location
+      infoPanel.add(ui.Label('Location: ' + loc.full, {margin:'0 0 2px 0'}));
+      infoPanel.add(ui.Label(
+        'Coordinates: ' + coords.lat.toFixed(4) + ', ' + coords.lon.toFixed(4),
+        {margin:'0 0 8px 0', color:'#444'}
+      ));
+      
+      var elev = (sampled && sampled.elev) ? sampled.elev : null;  // will be present in dict
+      // In the evaluate callback, use the value from dict:
+      var elevVal = dict.elev;
+      var elevTxt = (elevVal === null || elevVal === undefined || isNaN(elevVal))
+        ? 'NA'
+        : Math.round(Number(elevVal)) + ' m';
+      infoPanel.add(ui.Label('Elevation (MERIT DEM): ' + elevTxt,
+        {margin:'0 0 8px 0', color:'#444'}));
+
+      
+      infoPanel.add(ui.Label(
+        'Product: ' + current.productCode +
+        '  |  Bias: ' + current.biasCode +
+        '  |  Disaggregation: ' + current.disaggCode,
+        {fontWeight:'bold', margin:'0 0 6px 0'}
+      ));
+
+      // Table
+      infoPanel.add(makeValuesTable(dict));
+
+      // IDF curve (scalar math)
+      var K = dict.K, a = dict.a, b = dict.b, c = dict.c;
+        if ([K,a,b,c].some(function(v){ return v === null || v === undefined || isNaN(v); })) {
+          var msg2 = 'No data is available for this region (missing IDF parameters).';
+          infoPanel.add(ui.Label(msg2, {color:'#c00'}));
+          showToast(msg2);
+          updateComparisonPanel(pt, null);
+          return;
+        }
+
+      var Ke = ee.Number(K), ae = ee.Number(a), be = ee.Number(b), ce = ee.Number(c);
+      var idfArr = buildIdfArray(Ke, ae, be, ce, standardDurations, RETURN_PERIODS);
+
+      var titleText =
+        'IDF Curve — ' + loc.city + ' (' + coords.lat.toFixed(4) + ', ' + coords.lon.toFixed(4) + ') • ' +
+        current.productCode + ' • ' + current.biasCode + ' • ' + current.disaggCode +
+        '  |  K=' + ee.Number(K).format('%.2f').getInfo() +
+        ', a=' + ee.Number(a).format('%.2f').getInfo() +
+        ', b=' + ee.Number(b).format('%.2f').getInfo() +
+        ', c=' + ee.Number(c).format('%.2f').getInfo();
+
+      idfChartForRight = makeIdfLineChart(idfArr, standardDurations, RP_NAMES, titleText);
+
+      // Right panel: IDF + bars
+      updateComparisonPanel(pt, idfChartForRight);
+    });
+  });
+});
+
+// === Helper used in the left info table ===
+function makeValuesTable(sampleDict) {
+  var keysOrder = ['K','a','b','c','MSE','RMSE','R2'];
+  var panel = ui.Panel({layout: ui.Panel.Layout.flow('vertical')});
+
+  function row(label, val) {
+    var l = ui.Label(label, {margin: '2px 0', fontWeight: 'bold'});
+    var v = ui.Label(
+      (val === null || val === undefined || isNaN(val)) ? 'NA'
+        : (typeof val === 'number' ? val.toFixed(4) : val),
+      {margin: '2px 0 2px 8px', textAlign: 'right'}
+    );
+    return ui.Panel([l, v], ui.Panel.Layout.flow('horizontal'), {stretch: 'horizontal'});
+  }
+
+  keysOrder.forEach(function(k){
+    panel.add(row(prettyName[k] || k, sampleDict[k]));
+  });
+  return panel;
+}
+
