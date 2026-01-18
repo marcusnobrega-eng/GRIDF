@@ -1,0 +1,5 @@
+dataset,reference_method_folder,alpha,valid_pixels,rejected_pixels,rejected_percent,pbar,p_raster_path
+CHIRPS,CETESB,0.05,68767,193,0.28065787368941497,0.8564247877069581,C:\Users\marcu\Documents\GitHub\GRIDF\IDF_Parameters_Bias_Corrected\CHIRPS\CETESB\IDF_KS_p.tif
+IMERG,CETESB,0.05,69860,7,0.01002004008016032,0.8759102058990714,C:\Users\marcu\Documents\GitHub\GRIDF\IDF_Parameters_Bias_Corrected\IMERG\CETESB\IDF_KS_p.tif
+PERSIANN,CETESB,0.05,10940,25,0.22851919561243145,0.7661466725043768,C:\Users\marcu\Documents\GitHub\GRIDF\IDF_Parameters_Bias_Corrected\PERSIANN\CETESB\IDF_KS_p.tif
+XAVIER,CETESB,0.05,69896,32,0.04578230513906375,0.8362457386516051,C:\Users\marcu\Documents\GitHub\GRIDF\IDF_Parameters_Bias_Corrected\XAVIER\CETESB\IDF_KS_p.tif
