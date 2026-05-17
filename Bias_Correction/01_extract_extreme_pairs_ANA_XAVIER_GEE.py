@@ -39,8 +39,8 @@ MIN_GAP_DAYS = 3     # decluster gap (days) between kept extreme dates
 MIN_PER_YEAR = 1     # require at least this many declustered dates per station-year
 
 # Year range you want to process (clip to what's in the CSV automatically)
-YEAR_START = 1994
-YEAR_END   = 2020  # BR-DWGD PR extends to 2022; adjust if desired
+YEAR_START = 1995
+YEAR_END   = 2025  # BR-DWGD PR extends to 2022; adjust if desired
 
 # GEE / BR-DWGD sampling
 GEE_PROJECT = 'ee-marcusep2025'

@@ -24,7 +24,7 @@ from tqdm import tqdm
 import ee
 
 # ----------------- USER INPUTS -----------------
-CSV_PATH = 'C:/Users/marcu/PycharmProjects/hydrobr_project/Testing/rainfall_timeseries_with_metadata_all.csv'  # path to your wide ANA CSV
+CSV_PATH = '/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction/rainfall_timeseries_with_metadata_all.csv'  # path to your wide ANA CSV
 STATION_ID_COL = "Code"         # station identifier in your file
 LAT_COL        = "Latitude"
 LON_COL        = "Longitude"
@@ -34,7 +34,7 @@ MIN_GAP_DAYS = 3    # decluster: keep peaks separated by >= 3 days
 MIN_PER_YEAR = 1    # require at least this many declustered extremes in a year to include that year/station
 
 # Year range (discover from file if None)
-YEAR_START = 1994
+YEAR_START = 1995
 YEAR_END   = 2020
 
 # GEE / CHIRPS sampling

@@ -1,0 +1,73 @@
+event_selection:
+  percentile_basis: all_valid_days
+  main_percentile: 0.98
+  sensitivity_percentiles:
+  - 0.9
+  - 0.95
+  - 0.98
+  - 0.99
+  - 0.995
+  percentile_labels:
+  - p90
+  - p95
+  - p98
+  - p99
+  - p995
+  min_gap_days: 3
+  min_events_per_station_year: 1
+  declustering_mode: chronological_first
+gauge_qc:
+  min_valid_rain_mm: 0.0
+  max_valid_rain_mm: 500.0
+  min_valid_days_per_station_year: 30
+ratio_qc:
+  min_gauge_rainfall_for_ratio_mm: 1.0
+  min_product_rainfall_for_ratio_mm: 1.0
+  max_rainfall_for_ratio_mm: 350.0
+  ratio_clip:
+  - 0.25
+  - 5.0
+zeta:
+  definition: gauge_over_product
+  main_estimator: mean
+  sensitivity_estimators:
+  - median
+  save_estimators:
+  - mean
+  - median
+  min_pairs_per_station: 10
+interpolation:
+  method: idw
+  idw_neighbors: 8
+  idw_power: 2.0
+  zeta_clip_before_interpolation:
+  - 0.05
+  - 10.0
+application:
+  correction_equation: corrected = raw_product * zeta
+  zeta_clip_before_application:
+  - 0.25
+  - 5.0
+  preserve_input_grid: true
+  preserve_nodata: true
+  max_corrected_rainfall_mm: 500.0
+sensitivity_design:
+  percentile_sensitivity:
+    estimator: median
+    percentiles:
+    - 0.9
+    - 0.95
+    - 0.98
+    - 0.99
+    - 0.995
+  estimator_sensitivity:
+    percentile: 0.98
+    estimators:
+    - median
+    - mean
+pair_export:
+  keep_only_valid_ratio_pairs: true
+  min_gauge_rainfall_export_mm: 1.0
+  min_product_rainfall_export_mm: 1.0
+  write_generic_columns: true
+  write_product_specific_columns: true

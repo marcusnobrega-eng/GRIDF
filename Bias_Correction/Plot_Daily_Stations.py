@@ -16,7 +16,7 @@ from shapely.geometry import Point
 
 # ---------------- USER INPUTS ----------------
 CSV_PATH = r"C:\Users\marcu\PycharmProjects\hydrobr_project\Testing\stations_inventory_filtered_all.csv"
-STATES_SHP = r"C:/Users/marcu/PycharmProjects/Mapas_Rainfall_Distribution/Shapefiles/Brasil_estados.shp"
+STATES_SHP = r"C:/Users/marcu/PycharmProjects/Mapas_Rainfall_Distribution/BrazilShapefiles/Brasil_estados.shp"
 OUT_PNG   = r"C:\Users\marcu\PycharmProjects\hydrobr_project\Testing\map_rain_gauges_NYD.png"
 OUT_PDF   = r"C:\Users\marcu\PycharmProjects\hydrobr_project\Testing\map_rain_gauges_NYD.pdf"
 

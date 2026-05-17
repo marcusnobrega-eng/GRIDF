@@ -54,7 +54,7 @@ OUT_PNG = r'G:\My Drive\multi_product_bias_plots\boxplot_bias_raw_vs_corrected_A
 FONT_PATH_MONTSERRAT = r'C:/Users/marcu/PycharmProjects/Sucept_Maps/Montserrat/Montserrat-Regular.ttf'
 FONT_SIZE = 9
 
-# Data screening
+# BR-DWGD screening
 MIN_MM = 1.0              # min rain for both gauge & product
 RATIO_CLIP = (0.1, 10.0)  # drop extreme pairs as in your density plots
 

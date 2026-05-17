@@ -25,7 +25,7 @@ from tqdm import tqdm
 import ee
 
 # ----------------- USER INPUTS -----------------
-CSV_PATH = 'C:/Users/marcu/PycharmProjects/hydrobr_project/Testing/rainfall_timeseries_with_metadata_all.csv'
+CSV_PATH = '/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction/rainfall_timeseries_with_metadata_all.csv'  # path to your wide ANA CSV
 STATION_ID_COL = "Code"
 LAT_COL = "Latitude"
 LON_COL = "Longitude"
@@ -37,7 +37,7 @@ MIN_PER_YEAR = 1     # require at least this many declustered dates per station-
 
 # Year range (fixed to IMERG window requested)
 YEAR_START = 2000
-YEAR_END   = 2024
+YEAR_END   = 2025
 
 # GEE / IMERG sampling
 GEE_PROJECT = 'ee-marcusep2025'

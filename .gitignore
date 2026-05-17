@@ -1,0 +1,83 @@
+# ============================================================
+# GRIDF: ignore generated outputs and large data products
+# ============================================================
+
+# macOS / system
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs / temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# Project audit / cleanup scripts outputs
+_project_audit/
+GRIDF_backup_*/
+GRIDF_large_outputs_*/
+
+# Generated IDF outputs
+IDF_Fitting/Outputs/
+IDF_Fitting/Percentile_Sensitivity/
+IDF_Fitting/Distribution_Diagnostics/
+IDF_Fitting/logs/
+
+# Bias correction generated outputs
+Bias_Correction_Pipeline/data/products/
+Bias_Correction_Pipeline/figures/
+Bias_Correction_Pipeline/logs/
+Bias_Correction_Pipeline/metadata/gee_tasks/
+
+# Large rainfall / intermediate data
+Bias_Correction/ana_rainfall_1995_2025/
+
+# Generated paper figures / comparison outputs
+Figures/
+Existing_IDFs/Figures_Spatial_Bias/
+Existing_IDFs/Figures_IDF_Curves_Comparison/
+Existing_IDFs/Figures_IDF_Curves_Comparison_XLSX/
+Existing_IDFs/Figures_IDF_Curves_Excel_BR_DWGD_Rasters/
+
+# Final raster/data products to be archived externally
+Zonal_Disaggregation_Coefficients_FINAL/
+IDF_Parameters_Bias_Corrected/
+IDF_Parameters_Raw_Data/
+Annual_Maximum_Precipitation/
+GEV_Gumbel_RE_outputs/
+GEV_Gumbel_SA/
+
+# Large geospatial/data files
+*.tif
+*.tiff
+*.vrt
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.zip
+*.nc
+*.hdf
+*.h5
+
+# Large tabular outputs
+*.parquet
+*.feather

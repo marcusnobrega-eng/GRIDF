@@ -1,0 +1,64 @@
+products:
+  chirps:
+    label: CHIRPS
+    start_year: 1995
+    end_year: 2025
+    annual_max_folder: /Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/CHIRPS_Max
+    gee_collection: UCSB-CHG/CHIRPS/DAILY
+    gee_band: precipitation
+    daily_aggregation: daily_total_direct_mm_day
+    native_resolution_deg: 0.05
+    crs: EPSG:4326
+    scan_available_annual_max_rasters: true
+    notes: Daily precipitation is treated as mm/day.
+  persiann_cdr:
+    label: PERSIANN-CDR
+    start_year: 1995
+    end_year: 2025
+    annual_max_folder: /Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/PERSIANN_CDR_Max
+    gee_collection: NOAA/PERSIANN-CDR
+    gee_band: precipitation
+    daily_aggregation: daily_total_direct_mm_day
+    native_resolution_deg: 0.25
+    crs: EPSG:4326
+    scan_available_annual_max_rasters: true
+    notes: Daily precipitation is treated as mm/day.
+  br_dwgd:
+    label: BR-DWGD / Xavier
+    start_year: 1995
+    end_year: 2025
+    annual_max_folder: /Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/BR-DWGD
+    gee_collection: projects/sat-io/open-datasets/BR-DWGD/PR
+    gee_band: AUTO_DETECT
+    daily_aggregation: daily_total_direct_mm_day_confirm_band_and_scale
+    native_resolution_deg: 0.1
+    crs: EPSG:4326
+    scan_available_annual_max_rasters: true
+    notes: Band/scaling should be confirmed in Part 03 with inspect_gee_products.py.
+  imerg_v06:
+    label: IMERG V06
+    start_year: 2001
+    end_year: 2020
+    annual_max_folder: /Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/IMERG_V06_Max
+    gee_collection: NASA/GPM_L3/IMERG_V06
+    gee_band: precipitationCal
+    daily_aggregation: mean_half_hourly_rate_mm_hour_times_24
+    native_resolution_deg: 0.1
+    crs: EPSG:4326
+    scan_available_annual_max_rasters: true
+    notes: Native half-hourly precipitationCal is treated as mm/hour; daily total
+      = mean daily rate * 24. Final annual analysis uses complete years 2001-2020.
+  imerg_v07:
+    label: IMERG V07 Early Daily
+    start_year: 2001
+    end_year: 2025
+    annual_max_folder: /Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/IMERG_V07_Max
+    gee_collection: projects/climate-engine-pro/assets/ce-gpm-imerg-v07/early-daily
+    gee_band: AUTO_DETECT
+    daily_aggregation: daily_total_direct_mm_day
+    native_resolution_deg: 0.1
+    crs: EPSG:4326
+    scan_available_annual_max_rasters: true
+    notes: Climate Engine daily product is treated as mm/day. Final annual analysis
+      excludes partial 2000 and starts in 2001.
+    annual_max_pattern: IMERG_V07_MaxDaily_0p10deg_{year}_Brazil.tif

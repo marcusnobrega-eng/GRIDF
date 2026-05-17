@@ -34,8 +34,8 @@ MIN_GAP_DAYS = 3
 MIN_PER_YEAR = 1
 
 # Year range (discover from file if None). PERSIANN-CDR starts 1983 (lagged to recent quarter).
-YEAR_START = 1994
-YEAR_END = 2024
+YEAR_START = 1995
+YEAR_END = 2025
 
 # GEE / PERSIANN sampling
 GEE_PROJECT = 'ee-marcusep2025'

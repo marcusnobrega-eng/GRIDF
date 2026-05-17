@@ -96,7 +96,7 @@ with open(OUTFILE, "w", newline="", encoding="utf-8") as f:
     w.writerow(["", "Year", *years])
     # Header row 2
     w.writerow(["Latitude", "Longitude", *(["P (mm)"] * len(years))])
-    # Data rows
+    # BR-DWGD rows
     w.writerows(rows)
 
 print(f"\nSaved {kept} stations (skipped {skipped}).")

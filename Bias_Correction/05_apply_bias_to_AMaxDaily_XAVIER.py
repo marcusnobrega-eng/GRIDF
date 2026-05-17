@@ -1,9 +1,9 @@
 # 05_apply_bias_to_AMaxDaily_XAVIER_local.py
 # ---------------------------------------------------------
 # Multiply each annual-maximum XAVIER (BR-DWGD) GeoTIFF by the bias factor (zeta) map.
-# Inputs  : C:\Users\marcu\OneDrive\Documentos\GitHub\Rainfall_Temp_Distributor\Data\BR_DWGD_prmax_YYYY(.tif/.tiff)
+# Inputs  : C:\Users\marcu\OneDrive\Documentos\GitHub\Rainfall_Temp_Distributor\BR-DWGD\BR_DWGD_prmax_YYYY(.tif/.tiff)
 # Zeta    : single GeoTIFF with zeta(x,y) for Brazil (time-invariant; Xavier-derived)
-# Output  : ...\Data\BiasCorrected\BR_DWGD_prmax_YYYY_BC.tif
+# Output  : ...\BR-DWGD\BiasCorrected\BR_DWGD_prmax_YYYY_BC.tif
 #
 # Requires: rasterio, numpy  (pip install rasterio numpy)
 # ---------------------------------------------------------

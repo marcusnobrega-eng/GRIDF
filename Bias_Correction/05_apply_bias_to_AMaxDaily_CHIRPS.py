@@ -16,12 +16,12 @@ from rasterio.warp import reproject
 from rasterio.transform import Affine
 
 # ---------- USER SETTINGS ----------
-IN_DIR    = r"G:\My Drive\CHRIPS_Max"
-IN_GLOB   = r"CHIRPS_MaxDaily_0p1deg_*_Brazil.tif"   # pattern to match your files
-ZETA_TIF  = r"G:\My Drive\chirps_bias_pairs\zeta_map_005deg.tif"  # <-- set to your zeta raster
-OUT_DIR   = r"G:\My Drive\CHRIPS_Max\CHIRPS_BiasCorrected_AMaxDaily"
+IN_DIR    = r"/Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/CHIRPS_Max"
+IN_GLOB   = r"CHIRPS_MaxDaily_0p05deg_*_Brazil.tif"   # pattern to match your files
+ZETA_TIF  = r"/Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/CHIRPS_Max/zeta_map_005deg.tif"  # <-- set to your zeta raster
+OUT_DIR   = r"/Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/BiasCorrected/CHRIPS_Max"
 
-YEAR_MIN, YEAR_MAX = 1994, 2024
+YEAR_MIN, YEAR_MAX = 1995, 2025
 CAP_ZETA  = (0.25, 5)     # set to None to disable, or adjust range
 RESAMPLE  = Resampling.bilinear  # resampling for zeta onto CHIRPS grid
 COMPRESS  = "deflate"      # GeoTIFF compression

@@ -14,11 +14,11 @@ from matplotlib.colors import LogNorm
 import matplotlib.font_manager as fm
 
 # ---------------- USER INPUTS ----------------
-PAIRS_DIR  = r'G:\My Drive\chirps_bias_pairs'
+PAIRS_DIR  = r'/Users/mngomes/Library/CloudStorage/GoogleDrive-marcusep2025@gmail.com/My Drive/chirps_bias_pairs'
 PAIRS_GLOB = "chirps_bias_pairs_*.csv"
-ZETA_CSV   = r'G:\My Drive\chirps_bias_pairs\zeta_per_station.csv'
+ZETA_CSV   = r'/Users/mngomes/Library/CloudStorage/GoogleDrive-marcusep2025@gmail.com/My Drive/chirps_bias_pairs/zeta_per_station.csv'
 
-OUT_PNG    = r'G:\My Drive\chirps_bias_pairs\density_raw_vs_corrected_turbo.png'
+OUT_PNG    = r'/Users/mngomes/Library/CloudStorage/GoogleDrive-marcusep2025@gmail.com/My Drive/chirps_bias_pairs\density_raw_vs_corrected_turbo.png'
 
 MIN_MM       = 1.0
 RATIO_CLIP   = (0.1, 10.0)

@@ -409,7 +409,7 @@ var adm2 = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level2')
     'Paraguay','Peru','Suriname','Uruguay','Venezuela'
   ]));
   
-  // MERIT DEM (meters)
+  // MERIT Misc (meters)
 var meritDem = ee.Image('MERIT/DEM/v1_0_3').select('dem').rename('elev');
 
 map.addLayer(adm0.style({color:'#666', fillColor: '00000000', width:1}), {}, 'Country Borders', true, 0.8);

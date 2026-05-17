@@ -1,0 +1,26 @@
+# paths.yml
+# Centralized paths for the GRIDF rainfall bias-correction pipeline.
+#
+# This Part 01 configuration keeps everything inside:
+# /Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline
+
+project:
+  gridf_root: "/Users/mngomes/Documents/GitHub/GRIDF"
+  pipeline_root: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline"
+
+inputs:
+  gauge_timeseries_csv: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction/rainfall_timeseries_with_metadata_all.csv"
+  station_inventory_csv: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction/stations_inventory_filtered_all.csv"
+  annual_max_root: "/Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation"
+  brazil_shapefile: "/Users/mngomes/Documents/GitHub/GRIDF/BrazilShapefiles/ADMLevels/bra_admbnda_adm0_ibge_2020.shp"
+  dem: "/Users/mngomes/Documents/GitHub/GRIDF/Misc/DEM.tif"
+
+outputs:
+  output_root: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline"
+  data_root: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline/data"
+  figures_root: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline/figures"
+  metadata_root: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline/metadata"
+  logs_root: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline/logs"
+
+notes:
+  storage_policy: "Everything is stored inside the GitHub pipeline folder for now. If outputs become too heavy, move data/products and figures to Google Drive or Zenodo."

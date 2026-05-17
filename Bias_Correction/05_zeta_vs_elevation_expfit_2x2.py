@@ -49,7 +49,7 @@ CONFIGS = [
     },
 ]
 
-# DEM (0.1° MERIT in lat/lon; will reproject if different)
+# Misc (0.1° MERIT in lat/lon; will reproject if different)
 ELEV_TIF = r'G:\My Drive\multi_product_bias_plots\merit_dem_brazil_0p1deg.tif'
 
 OUT_PNG = r'G:\My Drive\multi_product_bias_plots\zeta_perpair_vs_elevation_2x2.png'
@@ -341,7 +341,7 @@ def main():
                 pairs = pairs.drop(columns=[c for c in ['lat_map','lon_map'] if c in pairs.columns])
 
         pairs = pairs.dropna(subset=['lat','lon','zeta'])
-        # unique station DEM sample
+        # unique station Misc sample
         coords = pairs[['station_id','lat','lon']].drop_duplicates('station_id').copy()
         elev = sample_dem_elevation(ELEV_TIF, coords['lon'].to_numpy(), coords['lat'].to_numpy())
         coords['elev_m'] = elev
