@@ -1,0 +1,8 @@
+setup_time: "2026-05-09T13:17:32"
+pipeline_root: "/Users/mngomes/Documents/GitHub/GRIDF/Bias_Correction_Pipeline"
+gridf_root: "/Users/mngomes/Documents/GitHub/GRIDF"
+storage_policy: "all_outputs_inside_github_folder_for_now"
+main_zeta_estimator: "median"
+interpolation: "IDW k=10 power=2"
+products: ['chirps', 'persiann_cdr', 'br_dwgd', 'imerg_v06', 'imerg_v07']
+percentile_labels: ['p90', 'p95', 'p98', 'p99', 'p995']

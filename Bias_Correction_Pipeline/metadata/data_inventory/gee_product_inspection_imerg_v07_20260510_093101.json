@@ -1,0 +1,85 @@
+{
+  "created_at": "2026-05-10T09:31:01",
+  "gee_project": "ee-marcusep2025",
+  "product_key": "imerg_v07",
+  "product_config": {
+    "label": "IMERG V07 Early Daily",
+    "start_year": 2001,
+    "end_year": 2025,
+    "annual_max_folder": "/Users/mngomes/Documents/GitHub/GRIDF/Annual_Maximum_Precipitation/IMERG_V07_Max",
+    "gee_collection": "projects/climate-engine-pro/assets/ce-gpm-imerg-v07/early-daily",
+    "gee_band": "AUTO_DETECT",
+    "daily_aggregation": "daily_total_direct_mm_day",
+    "native_resolution_deg": 0.1,
+    "crs": "EPSG:4326",
+    "scan_available_annual_max_rasters": true,
+    "notes": "Climate Engine daily product is treated as mm/day. Final annual analysis excludes partial 2000 and starts in 2001."
+  },
+  "configured_start_date": "2001-01-01",
+  "configured_end_date_exclusive": "2026-01-01",
+  "collection_info": {
+    "collection_id": "projects/climate-engine-pro/assets/ce-gpm-imerg-v07/early-daily",
+    "band_names_first_image": [
+      "precipitation",
+      "precipitation_cnt",
+      "precipitation_cnt_cond",
+      "MWprecipitation",
+      "MWprecipitation_cnt",
+      "MWprecipitation_cnt_cond",
+      "randomError",
+      "randomError_cnt",
+      "probabilityLiquidPrecipitation"
+    ],
+    "first_date_collection": "2000-06-01",
+    "last_date_collection": "2026-05-08",
+    "first_date_filtered": "2001-01-01",
+    "last_date_filtered": "2025-12-31",
+    "filtered_start_date": "2001-01-01",
+    "filtered_end_date": "2026-01-01",
+    "filtered_count": 9131,
+    "projection_info_first_image": {
+      "type": "Projection",
+      "crs": "EPSG:4326",
+      "transform": [
+        0.1,
+        0,
+        -180,
+        0,
+        -0.1,
+        90
+      ]
+    },
+    "nominal_scale_m_first_image": 11131.949079327358
+  },
+  "selected_precip_band": "precipitation",
+  "daily_image_properties": {
+    "daily_aggregation": "daily_total_direct_mm_day",
+    "date": "2001-01-15",
+    "date_str": "20010115",
+    "file_name": "3B-DAY-E.MS.MRG.3IMERG.20010115-S000000-E235959.V07B.nc4",
+    "image_count": 1,
+    "product_key": "imerg_v07",
+    "short_name": "GPM_3IMERGDE",
+    "source_band": "precipitation",
+    "source_collection": "projects/climate-engine-pro/assets/ce-gpm-imerg-v07/early-daily",
+    "units": "mm/day",
+    "upload_date": "2025-07-08",
+    "version": "07"
+  },
+  "daily_image_count_for_sample_date": 1,
+  "sample": {
+    "success": true,
+    "lon": -47.8825,
+    "lat": -15.7942,
+    "scale_m": 11132.0,
+    "raw_reduce_region": {
+      "precipitation": 0.004999999888241291
+    },
+    "product_mm": 0.004999999888241291
+  },
+  "interpretation": {
+    "daily_units": "mm/day",
+    "ratio_later": "gauge_mm / product_mm",
+    "notes": "This inspection confirms the image construction that Part 04 will use for station/date bias-pair sampling."
+  }
+}

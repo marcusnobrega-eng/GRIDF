@@ -1,0 +1,59 @@
+reference_key,source_sheet,source_row,station_code,station_name,latitude,longitude,K,a,b,c,K_r,a_r,b_r,c_r,flag_K_r_implausible,flag_a_r_implausible,flag_b_r_implausible,flag_c_r_implausible,any_gridf_coeff_implausible
+standard,Standard,3,-,Maceió,-9.66666667,-35.7,274.09,0.28,6.0,0.56,,,,,True,True,True,True,True
+standard,Standard,30,339036,Paracuru,-3.41666667,-39.03333333,1888.0,0.1493,27.0,0.8525,,,,,True,True,True,True,True
+standard,Standard,34,-,Fortaleza,-3.76666667,-38.55,491.78,0.21,5.0,0.64,,,,,True,True,True,True,True
+standard,Standard,57,-,São Luiz,-2.53333333,-44.28333333,1131.57,0.18,24.0,0.74,,,,,True,True,True,True,True
+standard,Standard,269,734006,João Pessoa,-7.1,-34.86666667,342.76,0.21,3.0,0.59,,,,,True,True,True,True,True
+standard,Standard,286,-,Olinda,-8.01666667,-34.85,666.64,0.2,10.0,0.66,,,,,True,True,True,True,True
+standard,Standard,311,2554026,São Miguel do Iguaçu,-25.18333333,-54.13333333,2886.0,0.124,26.0,0.927,114506.875,0.1580764204263687,162.12176513671875,1.4083281755447388,True,False,False,False,True
+standard,Standard,330,83057,Macaé,-22.38222222,-41.775,444.258,0.263,6.266,0.655,,,,,True,True,True,True,True
+standard,Standard,333,83758,Ilha Guaíba,-23.01666667,-44.03666667,1045.123,0.244,49.945,0.679,,,,,True,True,True,True,True
+standard,Standard,334,83788,Angra dos Reis,-23.05638889,-44.32138889,721.802,0.211,10.566,0.72,,,,,True,True,True,True,True
+standard,Standard,335,83789,Santa Cruz (Rio de Janeiro),-22.91666667,-43.66666667,2474.281,0.2113,37.4228,0.9491,,,,,True,True,True,True,True
+standard,Standard,338,2142052,Niterói,-22.9,-43.11666667,962.78,0.26,11.0,0.77,,,,,True,True,True,True,True
+standard,Standard,347,2243149,Alto da Boa Vista (Rio de Janeiro),-22.95,-43.26666667,4378.133,0.227,49.157,0.999,,,,,True,True,True,True,True
+standard,Standard,355,-,Cabo Frio,-22.86666667,-42.0,987.69,0.26,11.0,0.83,,,,,True,True,True,True,True
+standard,Standard,356,-,Jardim Botânico,-22.96666667,-43.23333333,693.06,0.24,11.0,0.68,,,,,True,True,True,True,True
+standard,Standard,364,-,Copacabana,-22.99,-43.19,2140.17,0.19,59.06,0.8,,,,,True,True,True,True,True
+standard,Standard,366,-,Grajaú,-22.92,-43.27,5274.55,0.2,52.18,0.98,,,,,True,True,True,True,True
+standard,Standard,368,-,Grota Funda,-23.01,-43.52,478.0,0.2,15.35,0.58,,,,,True,True,True,True,True
+standard,Standard,369,-,Guaratiba,-23.05,-43.59,1107.14,0.22,14.35,0.8,,,,,True,True,True,True,True
+standard,Standard,372,-,Itanhangá,-23.0,-43.3,1949.98,0.17,40.71,0.8,,,,,True,True,True,True,True
+standard,Standard,373,-,Jardim Botânico,-22.97,-43.22,1217.8,0.19,22.66,0.75,,,,,True,True,True,True,True
+standard,Standard,374,-,Laranjeiras,-22.94,-43.19,8518.56,0.21,60.99,1.1,,,,,True,True,True,True,True
+standard,Standard,379,-,Recreio,-23.01,-43.44,6396.55,0.19,50.25,1.07,,,,,True,True,True,True,True
+standard,Standard,381,-,Rocinha,-22.99,-43.25,10591.31,0.19,77.35,1.09,,,,,True,True,True,True,True
+standard,Standard,382,-,Santa Cruz,-22.91,-43.68,6455.6,0.17,45.89,1.05,,,,,True,True,True,True,True
+standard,Standard,383,-,Santa Teresa,-22.93,-43.2,2076.52,0.2,40.21,0.85,,,,,True,True,True,True,True
+standard,Standard,385,-,Saúde,-22.9,-43.19,1222.52,0.18,25.0,0.75,,,,,True,True,True,True,True
+standard,Standard,386,-,Sepetiba,-22.97,-43.71,1041.34,0.2,19.14,0.76,,,,,True,True,True,True,True
+standard,Standard,389,-,Tijuca,-22.93,-43.22,712.39,0.21,15.48,0.64,,,,,True,True,True,True,True
+standard,Standard,390,-,Urca,-22.96,-43.17,1999.11,0.19,31.01,0.87,,,,,True,True,True,True,True
+standard,Standard,391,-,Vidigal,-22.99,-43.23,2018.31,0.2,26.65,0.85,,,,,True,True,True,True,True
+standard,Standard,392,-,Natal,-5.76666667,-35.2,586.66,0.26,15.0,0.68,,,,,True,True,True,True,True
+standard,Standard,396,2755001,Porto Lucena,-27.85439999,-55.0236,872.0,0.1478,11.6,0.7127,,,,,True,True,True,True,True
+standard,Standard,400,2957001,Uruguaiana,-29.75,-57.0833,739.67,0.16,8.0,0.69,,,,,True,True,True,True,True
+standard,Standard,471,2345040,Ubatuba,-23.4331,-45.0683,675.631,0.151,17.851,0.635,,,,,True,True,True,True,True
+standard,Standard,474,2345059,Boraceia,-23.75,-45.85,582.081,0.113,12.978,0.624,,,,,True,True,True,True,True
+standard,Standard,496,2346089,Vicente de Carvalho,-23.93333333,-46.28333333,1349.325,0.155,23.948,0.757,,,,,True,True,True,True,True
+standard,Standard,519,2446003,Itanhaém,-24.1833,-46.8,500.02,0.155,16.91,0.525,,,,,True,True,True,True,True
+standard,Standard,535,-,Santos,-23.93333333,-46.31666667,748.69,0.27,10.0,0.66,,,,,True,True,True,True,True
+standard,Standard,540,-,Caraguatatuba,-23.61305556,-45.38694444,702.441,0.163,25.0,0.581,,,,,True,True,True,True,True
+disaggregation,Disaggregation,19,,,3.8436,-51.8375,986.6,0.118,9.19,0.706,,,,,True,True,True,True,True
+disaggregation,Disaggregation,92,,,-19.0,-57.64999999,1421.6,0.2247,23.3,0.8333,,,,,True,True,True,True,True
+disaggregation,Disaggregation,124,,,-22.11,-56.5275,7178.65,0.173,32.66,1.05,,,,,True,True,True,True,True
+disaggregation,Disaggregation,137,,,-7.09540861,-34.8488925,1424.1,0.1305,23.6,0.7468,,,,,True,True,True,True,True
+disaggregation,Disaggregation,141,,,-8.03332999,-34.88329999,362.7199,0.2129,4.4122,0.5824,,,,,True,True,True,True,True
+disaggregation,Disaggregation,154,,,-4.9833,-37.15,507.354,0.209,9.778,0.741,,,,,True,True,True,True,True
+disaggregation,Disaggregation,162,,,-5.5167,-35.25,948.887,0.213,9.778,0.741,,,,,True,True,True,True,True
+disaggregation,Disaggregation,163,,,-5.1167,-35.6333,685.195,0.185,9.778,0.741,,,,,True,True,True,True,True
+disaggregation,Disaggregation,166,,,-5.9167,-35.1833,964.868,0.216,9.778,0.741,,,,,True,True,True,True,True
+disaggregation,Disaggregation,210,,,-6.2,-35.0833,900.717,0.209,9.778,0.741,,,,,True,True,True,True,True
+disaggregation,Disaggregation,270,,,-5.067,-36.061,438.444,0.189,9.778,0.741,,,,,True,True,True,True,True
+disaggregation,Disaggregation,271,,,-5.05,-36.8,459.989,0.21,9.778,0.741,,,,,True,True,True,True,True
+disaggregation,Disaggregation,280,,,-9.7031,-65.3647,930.547,0.314,13.868,0.714,,,,,True,True,True,True,True
+disaggregation,Disaggregation,286,,,-10.7925,-65.3478,935.889,0.239,13.868,0.714,,,,,True,True,True,True,True
+disaggregation,Disaggregation,291,,,-12.8514,-62.8992,829.215,0.206,13.868,0.714,,,,,True,True,True,True,True
+disaggregation,Disaggregation,295,,,-28.66639999,-55.9797,743.8,0.1834,9.6,0.6811,,,,,True,True,True,True,True
+disaggregation,Disaggregation,297,,,-29.75,-57.0833,1456.4,0.1759,29.7,0.7894,,,,,True,True,True,True,True
+disaggregation,Disaggregation,317,,,-10.91666667,-37.05,1250.88,0.188,10.52,0.753,,,,,True,True,True,True,True

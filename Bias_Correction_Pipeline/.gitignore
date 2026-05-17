@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Large-output policy:
+# Outputs are intentionally kept in this project for now.
+# If the repository becomes too heavy later, uncomment:
+#
+# data/products/
+# data/gauges/events/
+# figures/diagnostics/
+# figures/sensitivity/
+# *.tif
+# *.tiff
+# *.csv
+# *.parquet
