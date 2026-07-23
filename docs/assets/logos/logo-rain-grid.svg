@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-labelledby="title desc">
+  <title id="title">GRIDF-BR rain grid logo concept</title>
+  <desc id="desc">A rainfall drop over a gridded map symbol next to the GRIDF-BR wordmark.</desc>
+  <rect width="640" height="160" rx="24" fill="#fffdf8"/>
+  <g transform="translate(18 18)">
+    <rect width="124" height="124" rx="22" fill="#103f4a"/>
+    <path d="M62 24C49 43 36 57 36 75a26 26 0 0 0 52 0c0-18-13-32-26-51Z" fill="#e88b3a"/>
+    <path d="M22 91h80M22 70h80M22 49h80M43 29v75M64 29v75M85 29v75" fill="none" stroke="#dceceb" stroke-width="3" opacity=".72"/>
+    <path d="M62 24C49 43 36 57 36 75a26 26 0 0 0 52 0c0-18-13-32-26-51Z" fill="none" stroke="#fffdf8" stroke-width="3"/>
+  </g>
+  <text x="170" y="78" fill="#16333f" font-family="Georgia, serif" font-size="52" font-weight="700">GRIDF<tspan fill="#e88b3a">-BR</tspan></text>
+  <text x="173" y="112" fill="#176b78" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="2">GRIDDED IDF CURVES</text>
+</svg>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#16333f" />
+    <title>GRIDF-BR | IDF curves</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css?v=idf-naming-20260723" />
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to the IDF curves</a>
+    <header class="topbar">
+      <div class="brand-lockup">
+        <img class="brand-logo" src="assets/logos/logo-rain-grid.svg" alt="GRIDF-BR gridded IDF curves" />
+      </div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-button active" data-view="atlas" type="button"><i data-lucide="map" aria-hidden="true"></i><span data-i18n="navAtlas">0.1° IDFs</span></button>
+        <button class="nav-button" data-view="cities" type="button"><i data-lucide="landmark" aria-hidden="true"></i><span data-i18n="navCities">Municipal IDFs</span></button>
+        <button class="nav-button" data-view="methods" type="button"><i data-lucide="book-open" aria-hidden="true"></i><span data-i18n="navMethods">Data &amp; methods</span></button>
+      </nav>
+      <div class="top-actions">
+        <div class="language-switch" role="group" aria-label="Language"><button class="language-button" data-language="en" type="button"><span aria-hidden="true">🇺🇸</span><span>EN</span></button><button class="language-button active" data-language="pt" type="button"><span aria-hidden="true">🇧🇷</span><span>PT</span></button></div>
+        <button class="action-button secondary share-trigger" id="shareButton" type="button" title="Compartilhar" aria-label="Compartilhar"><i data-lucide="share-2" aria-hidden="true"></i><span data-i18n="shareTrigger">Compartilhar</span></button>
+        <button class="action-button secondary feedback-trigger" id="feedbackButton" type="button" title="Enviar sugestão" aria-label="Enviar sugestão"><i data-lucide="message-square-plus" aria-hidden="true"></i><span data-i18n="feedbackTrigger">Sugestões</span></button>
+        <button class="icon-button" id="helpButton" type="button" title="How to use" aria-label="How to use"><i data-lucide="circle-help" aria-hidden="true"></i></button>
+        <button class="icon-button mobile-toggle" id="mobileControlsButton" type="button" title="Open controls" aria-label="Open controls"><i data-lucide="sliders-horizontal" aria-hidden="true"></i></button>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <section class="content-view atlas-view" id="atlasView">
+        <div class="atlas-layout">
+          <aside class="control-sidebar" id="atlasControls">
+            <div class="sidebar-intro">
+              <span class="eyebrow" data-i18n="atlasKicker">START WITH A LOCATION</span>
+              <h1 data-i18n="atlasTitle">Bias-corrected gridded IDF curves</h1>
+              <p data-i18n="atlasIntro">Click anywhere on the map to retrieve the gridded IDF curve for the selected rainfall product and disaggregation method.</p>
+            </div>
+            <div class="control-section">
+              <div class="section-heading"><h2 data-i18n="atlasControls">IDF controls</h2><span class="control-badge" data-i18n="biasCorrected">BIAS-CORRECTED</span></div>
+              <label for="idfProduct" data-i18n="dataset">Rainfall dataset</label>
+              <select id="idfProduct"></select>
+              <label for="idfMethod" data-i18n="disaggregationMethod">Disaggregation method</label>
+              <select id="idfMethod"></select>
+              <div class="control-pair">
+                <div><label for="idfDuration" data-i18n="duration">Duration</label><select id="idfDuration"></select></div>
+                <div><label for="idfReturnPeriod" data-i18n="returnPeriod">Return period</label><select id="idfReturnPeriod"></select></div>
+              </div>
+              <label for="idfPlotReturnPeriods" data-i18n="plotReturnPeriods">Return periods in the chart (years)</label>
+              <input id="idfPlotReturnPeriods" type="text" inputmode="decimal" autocomplete="off" data-i18n-placeholder="plotReturnPeriodsPlaceholder" placeholder="2, 5, 10, 25, 50, 100" />
+              <label for="idfLayer" data-i18n="mapLayer">Map layer</label>
+              <select id="idfLayer"></select>
+              <button class="action-button primary full-width" id="fitBrazilButton" type="button"><i data-lucide="scan" aria-hidden="true"></i><span data-i18n="fitBrazil">Fit Brazil</span></button>
+            </div>
+            <div class="control-section compact-section">
+              <div class="section-heading"><h2 data-i18n="currentSelection">Current selection</h2><i data-lucide="database" aria-hidden="true"></i></div>
+              <p class="small-note" id="rasterStatus" data-i18n="loadingRaster">Loading gridded parameters…</p>
+              <dl class="mini-list"><div><dt data-i18n="gridResolution">Grid</dt><dd id="gridResolution">—</dd></div><div><dt data-i18n="coverage">Coverage</dt><dd id="gridCoverage">—</dd></div><div><dt data-i18n="validPixels">Valid pixels</dt><dd id="gridPixels">—</dd></div></dl>
+              <p class="small-note native-grid-note" data-i18n="gridNativeNote">The selected product is displayed and sampled on its own native grid.</p>
+            </div>
+            <div class="control-section compact-section">
+              <div class="section-heading"><h2 data-i18n="quickExport">Quick export</h2><i data-lucide="download" aria-hidden="true"></i></div>
+              <button class="text-button" id="downloadIdfGridButton" type="button"><i data-lucide="file-down" aria-hidden="true"></i><span data-i18n="downloadCurrentGrid">Download current parameter grid</span></button>
+              <p class="small-note" data-i18n="gridExportNote">Exports the selected bias-corrected Sherman parameter stack.</p>
+            </div>
+            <div class="sidebar-footnote"><span class="eyebrow" data-i18n="productNoteKicker">PRODUCT NOTE</span><p data-i18n="productNote">This interface uses bias-corrected parameter stacks. Raw parameter stacks are intentionally excluded from this decision-support interface.</p></div>
+          </aside>
+          <section class="atlas-map-panel">
+            <div id="idfMap" class="map-canvas" role="application" aria-label="Bias-corrected gridded IDF map"></div>
+            <div class="map-chip"><span class="eyebrow" data-i18n="mapStatus">MAP STATUS</span><strong id="mapLayerTitle">IDF intensity</strong><p id="mapStatusText">Loading gridded parameters…</p></div>
+            <div class="map-toolbar"><button class="icon-button" id="zoomInButton" type="button" title="Zoom in" aria-label="Zoom in"><i data-lucide="plus" aria-hidden="true"></i></button><button class="icon-button" id="zoomOutButton" type="button" title="Zoom out" aria-label="Zoom out"><i data-lucide="minus" aria-hidden="true"></i></button></div>
+            <div class="raster-legend" id="rasterLegend"></div>
+            <div class="map-help"><i data-lucide="mouse-pointer-click" aria-hidden="true"></i><span data-i18n="mapHelp">Click the map to get a local IDF curve.</span></div>
+          </section>
+          <aside class="idf-detail-panel" id="idfDetailPanel" aria-label="IDF result details">
+            <div id="idfDetail" class="detail-empty"><div class="detail-icon"><i data-lucide="map-pin" aria-hidden="true"></i></div><span class="eyebrow" data-i18n="selectedLocation">SELECTED LOCATION</span><h2 data-i18n="noLocation">No location selected</h2><p data-i18n="clickMap">Click the map to calculate the IDF curve and design intensities at that location.</p><div class="detail-rule"></div><div class="detail-equation"><span class="eyebrow" data-i18n="equation">SHERMAN EQUATION</span><strong>I = K · T<sup>a</sup> / (b + t)<sup>c</sup></strong><small data-i18n="equationNote">Intensity in mm/h; duration t in minutes.</small></div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="content-view data-view city-view" id="citiesView" hidden>
+        <section class="city-layout">
+          <aside class="control-sidebar city-control-sidebar" id="cityControls">
+            <div class="sidebar-intro">
+              <span class="eyebrow" data-i18n="citiesKicker">MUNICIPAL SCALE</span>
+              <h1 data-i18n="citiesTitle">Municipal IDFs</h1>
+              <p data-i18n="citiesIntro">Browse city-scale summaries of the bias-corrected gridded IDF parameters and the interpolated temporal-distribution coefficients.</p>
+            </div>
+            <div class="control-section">
+              <div class="section-heading"><h2 data-i18n="atlasControls">IDF controls</h2><span class="control-badge" data-i18n="biasCorrected">BIAS-CORRECTED</span></div>
+              <label for="citySearch" data-i18n="citySearchLabel">Search municipality</label>
+              <input id="citySearch" type="search" data-i18n-placeholder="citySearchPlaceholder" placeholder="Name or code" />
+              <label for="cityState" data-i18n="cityStateLabel">State</label>
+              <select id="cityState"></select>
+              <label for="cityProduct" data-i18n="dataset">Rainfall dataset</label>
+              <select id="cityProduct"></select>
+              <label for="cityMethod" data-i18n="disaggregationMethod">Disaggregation method</label>
+              <select id="cityMethod"></select>
+              <div class="control-pair">
+                <div><label for="cityDuration" data-i18n="duration">Duration</label><select id="cityDuration"></select></div>
+                <div><label for="cityReturnPeriod" data-i18n="returnPeriod">Return period</label><select id="cityReturnPeriod"></select></div>
+              </div>
+              <label for="cityPlotReturnPeriods" data-i18n="plotReturnPeriods">Return periods in the chart (years)</label>
+              <input id="cityPlotReturnPeriods" type="text" inputmode="decimal" autocomplete="off" data-i18n-placeholder="plotReturnPeriodsPlaceholder" placeholder="2, 5, 10, 25, 50, 100" />
+            </div>
+            <div class="control-section compact-section">
+              <div class="section-heading"><h2 data-i18n="currentSelection">Current selection</h2><i data-lucide="landmark" aria-hidden="true"></i></div>
+              <p class="small-note" id="cityStatus">—</p>
+              <p class="small-note" data-i18n="cityMethodNote">Municipal annual maxima are area-weighted from the corrected raster series; Gumbel return levels are fitted by the method of moments and Sherman is refitted at municipal scale.</p>
+            </div>
+            <div class="control-section compact-section city-control-actions">
+              <div class="section-heading"><h2 data-i18n="quickExport">Quick export</h2><i data-lucide="download" aria-hidden="true"></i></div>
+              <button class="action-button secondary full-width" id="downloadCityCatalogButton" type="button"><i data-lucide="download" aria-hidden="true"></i><span data-i18n="downloadCityCatalog">Download municipal catalogue</span></button>
+              <p class="small-note" data-i18n="cityCatalogDownloadNote">Download the refitted municipal catalogue for the selected product, duration, and return period.</p>
+            </div>
+          </aside>
+          <div class="city-map-card"><div id="cityMap" class="city-map"></div><div class="map-chip light-chip"><span class="eyebrow" data-i18n="mapStatus">MAP STATUS</span><strong id="cityMapTitle">—</strong><p id="cityMapMeta" data-i18n="cityMapNote">Click a municipality to inspect its IDF curve and coefficients.</p></div><div class="map-toolbar"><button class="icon-button" id="cityZoomInButton" type="button" title="Zoom in" aria-label="Zoom in"><i data-lucide="plus" aria-hidden="true"></i></button><button class="icon-button" id="cityZoomOutButton" type="button" title="Zoom out" aria-label="Zoom out"><i data-lucide="minus" aria-hidden="true"></i></button></div><div class="raster-legend city-legend" id="cityLegend"></div><div class="map-help"><i data-lucide="mouse-pointer-click" aria-hidden="true"></i><span data-i18n="cityMapHelp">Select a municipality on the map.</span></div></div>
+          <aside class="idf-detail-panel city-detail-panel" id="cityDetail"><div class="detail-empty"><div class="detail-icon"><i data-lucide="landmark" aria-hidden="true"></i></div><span class="eyebrow" data-i18n="selectedMunicipality">SELECTED MUNICIPALITY</span><h2 data-i18n="noMunicipality">No municipality selected</h2><p data-i18n="clickMunicipality">Click a municipality on the map.</p></div></aside>
+        </section>
+      </section>
+
+      <section class="content-view data-view" id="disaggView" hidden>
+        <div class="content-hero"><span class="eyebrow" data-i18n="disaggKicker">SUPPORTING DATA</span><h1 data-i18n="disaggTitle">Interpolated disaggregation maps</h1><p data-i18n="disaggIntro">Explore the spatial coefficient surfaces used to convert daily or reference-duration rainfall into the durations used by the IDF curves.</p></div>
+        <section class="disagg-controls"><div><label for="disaggFamily" data-i18n="coefficientFamily">Coefficient family</label><select id="disaggFamily"></select></div><div><label for="disaggDuration" data-i18n="coefficientDuration">Duration</label><select id="disaggDuration"></select></div><div class="disagg-control-note"><span class="eyebrow" data-i18n="interpolationMethod">INTERPOLATION</span><strong>IDW · k = 10 · p = 2</strong><small data-i18n="disaggControlNote">The selected surface is an interpolated coefficient grid; station records are shown below for context.</small></div><button class="action-button secondary" id="downloadDisaggButton" type="button"><i data-lucide="download" aria-hidden="true"></i><span data-i18n="downloadDisagg">Download coefficient table</span></button></section>
+        <section class="disagg-map-card"><div id="disaggMap" class="support-map"></div><div class="map-chip light-chip"><span class="eyebrow" data-i18n="mapStatus">MAP STATUS</span><strong id="disaggMapStatus">—</strong><p id="disaggMapMeta" data-i18n="disaggMapNote">Interpolated coefficient surface with station locations overlaid.</p></div><div class="map-toolbar"><button class="icon-button" id="disaggZoomInButton" type="button" title="Zoom in" aria-label="Zoom in"><i data-lucide="plus" aria-hidden="true"></i></button><button class="icon-button" id="disaggZoomOutButton" type="button" title="Zoom out" aria-label="Zoom out"><i data-lucide="minus" aria-hidden="true"></i></button></div><div class="disagg-legend" id="disaggLegend"></div><div class="map-help"><i data-lucide="mouse-pointer-click" aria-hidden="true"></i><span data-i18n="disaggMapHelp">Click a station to inspect its observed coefficient vector.</span></div></section>
+        <section class="station-support-grid"><article class="station-support-panel"><div class="panel-heading"><div><span class="eyebrow" data-i18n="coefficientRecords">STATION SUPPORT</span><h2 data-i18n="coefficientTableTitle">Station observations beneath the interpolated surface</h2></div><span class="table-count" id="disaggTableCount">—</span></div><div class="station-summary-strip" id="disaggStationSummary"></div><div class="table-wrap compact-station-table" id="disaggTable"></div><p class="table-footnote" data-i18n="disaggTableNote">A compact sample of station records is shown here; the full support export is available from the coefficient download.</p></article><aside class="station-support-panel selected-station-panel"><div id="disaggDetail" class="station-detail-empty"><i data-lucide="waves" aria-hidden="true"></i><p data-i18n="clickStation">Click a station to inspect its coefficient profile.</p></div><div id="disaggChart" class="chart-box"></div></aside></section>
+      </section>
+
+      <section class="content-view data-view methods-view" id="methodsView" hidden>
+        <div class="content-hero"><span class="eyebrow" data-i18n="methodsKicker">DOCUMENTATION</span><h1 data-i18n="methodsTitle">Data &amp; methods</h1><p data-i18n="methodsIntro">The browser tool exposes the bias-corrected gridded IDF curves first, then documents the supporting station and coefficient pathways.</p></div>
+        <div class="methods-grid" id="methodsGrid"></div>
+        <section class="figure-section"><div class="panel-heading"><div><span class="eyebrow" data-i18n="figuresKicker">PROJECT MATERIAL</span><h2 data-i18n="figuresTitle">Supporting figures</h2></div></div><div class="figure-grid" id="figureGrid"></div></section>
+      </section>
+    </main>
+
+    <div class="welcome-overlay" id="welcomeModal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+      <section class="welcome-card"><button class="modal-close" id="closeWelcomeButton" type="button" title="Close introduction" aria-label="Close introduction"><i data-lucide="x" aria-hidden="true"></i></button><div class="welcome-kicker" data-i18n="welcomeKicker">START HERE</div><div class="welcome-steps"><article class="welcome-step active" data-step="0"><div class="welcome-language"><span class="eyebrow" data-i18n="languageLabel">IDIOMA</span><div class="language-switch" role="group" aria-label="Language"><button class="language-button" data-language="en" type="button"><span aria-hidden="true">🇺🇸</span><span>EN</span></button><button class="language-button active" data-language="pt" type="button"><span aria-hidden="true">🇧🇷</span><span>PT</span></button></div></div><img class="welcome-logo" src="assets/logos/logo-rain-grid.svg" alt="GRIDF-BR" /><h2 id="welcomeTitle" data-i18n="welcomeTitle">Get an IDF at a location</h2><p data-i18n="welcomeIntro">Choose a bias-corrected rainfall product, click the IDF map, and download the resulting curve and design values.</p><div class="welcome-signal"><span data-i18n="signalAtlas">0.1° IDFs</span><span data-i18n="signalCurves">Curves</span><span data-i18n="signalExports">Exports</span></div></article><article class="welcome-step" data-step="1" hidden><span class="step-number">01</span><h2 data-i18n="welcomeStep1Title">Choose the product</h2><p data-i18n="welcomeStep1Body">Select a rainfall dataset and disaggregation method. The map is always restricted to bias-corrected parameter stacks.</p></article><article class="welcome-step" data-step="2" hidden><span class="step-number">02</span><h2 data-i18n="welcomeStep2Title">Click the map</h2><p data-i18n="welcomeStep2Body">A click retrieves K, a, b, and c from the gridded stack and computes intensities for the selected return period and duration.</p></article><article class="welcome-step" data-step="3" hidden><span class="step-number">03</span><h2 data-i18n="welcomeStep3Title">Inspect and export</h2><p data-i18n="welcomeStep3Body">Read the IDF curve, change the return period or duration, and download a CSV or Word summary for the selected location.</p></article></div><footer class="welcome-footer"><div class="welcome-dots"><button class="welcome-dot active" data-step="0" type="button" aria-label="Introduction step 1"></button><button class="welcome-dot" data-step="1" type="button" aria-label="Introduction step 2"></button><button class="welcome-dot" data-step="2" type="button" aria-label="Introduction step 3"></button><button class="welcome-dot" data-step="3" type="button" aria-label="Introduction step 4"></button></div><div class="welcome-actions"><button class="toolbar-button" id="welcomeBack" type="button"><i data-lucide="arrow-left" aria-hidden="true"></i><span data-i18n="back">Back</span></button><button class="action-button primary" id="welcomeNext" type="button"><span data-i18n="next">Next</span><i data-lucide="arrow-right" aria-hidden="true"></i></button></div></footer></section>
+    </div>
+    <div class="figure-lightbox" id="figureLightbox" hidden role="dialog" aria-modal="true" aria-labelledby="figureLightboxTitle">
+      <button class="modal-close" id="closeFigureButton" type="button" title="Close figure" aria-label="Close figure"><i data-lucide="x" aria-hidden="true"></i></button>
+      <div class="figure-lightbox-content"><img id="figureLightboxImage" src="" alt="" /><p id="figureLightboxTitle"></p></div>
+    </div>
+    <div class="feedback-overlay" id="feedbackModal" hidden role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+      <section class="feedback-card">
+        <button class="modal-close" id="closeFeedbackButton" type="button" title="Fechar" aria-label="Fechar"><i data-lucide="x" aria-hidden="true"></i></button>
+        <span class="eyebrow" data-i18n="feedbackKicker">CONTRIBUA COM A FERRAMENTA</span>
+        <h2 id="feedbackTitle" data-i18n="feedbackTitle">Enviar uma sugestão</h2>
+        <p class="feedback-intro" data-i18n="feedbackIntro">A mensagem será preparada em seu aplicativo de e-mail com os detalhes técnicos do contexto atual.</p>
+        <form id="feedbackForm">
+          <label for="feedbackName" data-i18n="feedbackNameLabel">Seu nome</label>
+          <input id="feedbackName" name="name" type="text" autocomplete="name" required maxlength="120" />
+          <label for="feedbackEmail" data-i18n="feedbackEmailLabel">E-mail para resposta (opcional)</label>
+          <input id="feedbackEmail" name="email" type="email" autocomplete="email" maxlength="160" />
+          <label for="feedbackMessage" data-i18n="feedbackMessageLabel">Sugestão ou comentário</label>
+          <textarea id="feedbackMessage" name="message" required maxlength="1800" rows="6"></textarea>
+          <div class="feedback-context"><span class="eyebrow" data-i18n="feedbackContextLabel">CONTEXTO INCLUÍDO</span><p id="feedbackContext"></p></div>
+          <div class="feedback-actions"><button class="toolbar-button" id="cancelFeedbackButton" type="button" data-i18n="cancel">Cancelar</button><button class="action-button primary" type="submit"><i data-lucide="mail" aria-hidden="true"></i><span data-i18n="feedbackSubmit">Preparar e-mail</span></button></div>
+        </form>
+      </section>
+    </div>
+    <div class="share-overlay" id="shareModal" hidden role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+      <section class="share-card">
+        <button class="modal-close" id="closeShareButton" type="button" aria-label="Close"><i data-lucide="x" aria-hidden="true"></i></button>
+        <span class="eyebrow" data-i18n="shareKicker">DIVULGUE A FERRAMENTA</span>
+        <h2 id="shareTitle" data-i18n="shareTitle">Compartilhar GRIDF-BR</h2>
+        <p class="share-intro" id="sharePreview"></p>
+        <div class="share-actions">
+          <button class="action-button secondary" id="shareWhatsappButton" type="button"><i data-lucide="message-circle" aria-hidden="true"></i><span>WhatsApp</span></button>
+          <button class="action-button secondary" id="shareFacebookButton" type="button"><i data-lucide="facebook" aria-hidden="true"></i><span>Facebook</span></button>
+          <button class="action-button secondary" id="shareInstagramButton" type="button"><i data-lucide="instagram" aria-hidden="true"></i><span>Instagram</span></button>
+          <button class="action-button secondary" id="shareEmailButton" type="button"><i data-lucide="mail" aria-hidden="true"></i><span data-i18n="shareEmail">E-mail</span></button>
+          <button class="action-button primary" id="copyShareButton" type="button"><i data-lucide="copy" aria-hidden="true"></i><span data-i18n="shareCopy">Copiar mensagem</span></button>
+        </div>
+      </section>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
+  <script src="app.js?v=idf-naming-20260723"></script>
+  </body>
+</html>

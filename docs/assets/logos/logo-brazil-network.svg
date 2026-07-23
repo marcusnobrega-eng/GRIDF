@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-labelledby="title desc">
+  <title id="title">GRIDF-BR national network logo concept</title>
+  <desc id="desc">An abstract Brazil-shaped network of rainfall points and connecting lines next to the GRIDF-BR wordmark.</desc>
+  <rect width="640" height="160" rx="24" fill="#fffdf8"/>
+  <g transform="translate(22 17)">
+    <path d="M48 8 79 18l15 22-4 21 15 20-19 28-27 13-20-18-22-5-5-24 12-19-6-22 12-18Z" fill="#176b78" stroke="#103f4a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M31 42 58 58 82 39M58 58l1 39M58 58l22 22M30 80l29-22M82 39l-2 41" fill="none" stroke="#dceceb" stroke-width="3"/>
+    <circle cx="31" cy="42" r="5" fill="#e88b3a"/><circle cx="58" cy="58" r="5" fill="#e88b3a"/><circle cx="82" cy="39" r="5" fill="#e88b3a"/><circle cx="59" cy="97" r="5" fill="#e88b3a"/><circle cx="80" cy="80" r="5" fill="#e88b3a"/>
+  </g>
+  <text x="170" y="78" fill="#16333f" font-family="Georgia, serif" font-size="52" font-weight="700">GRIDF<tspan fill="#e88b3a">-BR</tspan></text>
+  <text x="173" y="112" fill="#176b78" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="2">A NATIONAL RAINFALL NETWORK</text>
+</svg>

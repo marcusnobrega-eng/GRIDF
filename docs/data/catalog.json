@@ -1,0 +1,64 @@
+{
+  "project": "GRIDF-BR",
+  "title": {
+    "en": "GRIDF-BR Atlas",
+    "pt": "Atlas GRIDF-BR"
+  },
+  "subtitle": {
+    "en": "Gridded intensity–duration–frequency assessment for Brazil",
+    "pt": "Avaliação gradeada de relações intensidade–duração–frequência para o Brasil"
+  },
+  "dataNote": {
+    "en": "First browser-based prototype using archived station diagnostics and published summaries.",
+    "pt": "Primeiro protótipo no navegador usando diagnósticos de estações e resumos publicados."
+  },
+  "sources": [
+    {
+      "name": "ANA telemetric disaggregation records",
+      "en": "Sub-daily station records used for temporal-distribution coefficients.",
+      "pt": "Registros subdiários usados para os coeficientes de distribuição temporal."
+    },
+    {
+      "name": "Daily ANA gauge correction sample",
+      "en": "Daily gauge observations used to estimate multiplicative correction factors.",
+      "pt": "Observações diárias usadas para estimar fatores de correção multiplicativos."
+    },
+    {
+      "name": "GRIDF manuscript outputs",
+      "en": "Gumbel/GEV diagnostics, Sherman fitting, and comparative IDF summaries.",
+      "pt": "Diagnósticos Gumbel/GEV, ajuste Sherman e resumos comparativos de IDF."
+    }
+  ],
+  "products": [
+    {
+      "code": "BR-DWGD",
+      "en": "BR-DWGD",
+      "pt": "BR-DWGD",
+      "period": "1995–2025"
+    },
+    {
+      "code": "CHIRPS",
+      "en": "CHIRPS",
+      "pt": "CHIRPS",
+      "period": "1995–2025"
+    },
+    {
+      "code": "PERSIANN-CDR",
+      "en": "PERSIANN-CDR",
+      "pt": "PERSIANN-CDR",
+      "period": "1995–2025"
+    },
+    {
+      "code": "IMERG V06",
+      "en": "IMERG V06",
+      "pt": "IMERG V06",
+      "period": "2001–2020"
+    },
+    {
+      "code": "IMERG V07",
+      "en": "IMERG V07",
+      "pt": "IMERG V07",
+      "period": "2001–2025"
+    }
+  ]
+}
